@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "tg-bot-gpt-helper"
+version = "0.1.0"
+description = ""
+authors = ["Sanyavas <vasilinaoleksandr@gmail.com>"]
+readme = "README.md"
+packages = [{include = "tg_bot_gpt_helper"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pytelegrambotapi = "^4.12.0"
+openai = "^0.27.8"
+pymongo = "^4.4.1"
+python-dotenv = "^1.0.0"
+beautifulsoup4 = "^4.12.2"
+apscheduler = "^3.10.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
