@@ -1,4 +1,4 @@
-# TelegramBotEvaGPT 
+# TelegramBotEvaGPT ![Telegram]("https://img.shields.io/badge/Telegram-blue?logo=telegram&logoColor=white&style=for-the-badge")
 
 ### ⚡ Technologies:  
 ![aiogram](https://img.shields.io/badge/telegram-aiogram-blue.svg?style=flat-square&logo=Windows%2011&logoColor=white)
