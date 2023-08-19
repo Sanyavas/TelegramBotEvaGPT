@@ -17,7 +17,7 @@ OPENAI_KEY = os.getenv('OPENAI_KEY')
 def load_enemy_losses():
     with open('enemy_losses.json', 'r', encoding='utf-8') as file:
         data = json.load(file)
-    return data[:3]
+    return data[:3]  # 3 останні дати втрат москалів
 
 
 def question_to_ai(user_id, question):
@@ -27,7 +27,7 @@ def question_to_ai(user_id, question):
              "You are an assistant who answers questions clearly and as briefly as possible. " \
              "Always strive to give concise answers. " \
              "Answer in Ukrainian, unless otherwise indicated. " \
-             f"інформація про втрати ворога: {enemy_losses_data}"
+             f"Information about the losses of the enemy: {enemy_losses_data}, these are the official losses of muscovites in Ukraine"
 
     # Отримати кілька останніх повідомлень із бази даних
     chat_hist = get_chat_history(user_id)

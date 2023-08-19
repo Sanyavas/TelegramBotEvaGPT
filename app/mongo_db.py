@@ -1,5 +1,5 @@
 import os
-from pymongo import MongoClient
+from pymongo import MongoClient, DESCENDING
 from pymongo.server_api import ServerApi
 import dotenv
 
@@ -12,7 +12,7 @@ DB_MONGO = client.chat_history.users_history
 
 def get_chat_history(user_id):
     """Отримання історії чату для певного користувача"""
-    history = DB_MONGO.find({'user_id': user_id})
+    history = DB_MONGO.find({'user_id': user_id}).sort('_id', DESCENDING).limit(5)  # 5 останні повідомлення
     return list(history)
 
 
