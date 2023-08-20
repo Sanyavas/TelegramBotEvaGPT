@@ -1,10 +1,12 @@
 import os
 import json
 import logging
+from pathlib import Path
+
 import openai
 import dotenv
 
-from mongo_db import get_chat_history
+from mongo_db import get_chat_history, get_enemy_losses
 
 dotenv.load_dotenv()
 
@@ -13,26 +15,31 @@ logger = logging.getLogger(__name__)
 
 OPENAI_KEY = os.getenv('OPENAI_KEY')
 
-
-def load_enemy_losses():
-    with open('enemy_losses.json', 'r', encoding='utf-8') as file:
-        data = json.load(file)
-    return data[:3]  # 3 останні дати втрат москалів
+# BASE_DIR = Path(__file__).resolve().parent.parent
+# current_dir = os.path.dirname(os.path.abspath(__file__))
+# enemy_losses = os.path.join(current_dir, 'enemy_losses.json')
+#
+#
+# def load_enemy_losses():
+#     with open(enemy_losses, 'r', encoding='utf-8') as file:
+#         data = json.load(file)
+#     return data[:3]  # 3 останні дати втрат москалів
 
 
 def question_to_ai(user_id, question):
     openai.api_key = OPENAI_KEY
-    enemy_losses_data = load_enemy_losses()
+    # enemy_losses_data = load_enemy_losses()
+    asd = get_enemy_losses()
     worker = "Your name is EVA. " \
              "You are an assistant who answers questions clearly and as briefly as possible. " \
              "Always strive to give concise answers. " \
              "Answer in Ukrainian, unless otherwise indicated. " \
-             f"Information about the losses of the enemy: {enemy_losses_data}, these are the official losses of muscovites in Ukraine"
+             f"Information about the losses of the enemy: {asd}, these are the official losses of muscovites in Ukraine"
 
     # Отримати кілька останніх повідомлень із бази даних
     chat_hist = get_chat_history(user_id)
     messages = [{"role": "system", "content": worker}]
-    for record in chat_hist[-5:]:  # Отримати останні 5 повідомлень
+    for record in chat_hist:  # Отримати останні 5 повідомлень
         messages.append({"role": "user", "content": record['text']})
         messages.append({"role": "assistant", "content": record['response']})
 

@@ -8,6 +8,8 @@ import logging
 from bs4 import BeautifulSoup
 from apscheduler.schedulers.background import BackgroundScheduler
 
+from mongo_db import DB_MONGO_ENEMY
+
 logging.basicConfig(level=logging.INFO)
 logging.getLogger('apscheduler').setLevel(logging.WARNING)
 logger = logging.getLogger(__name__)
@@ -17,8 +19,10 @@ base_url = "https://index.minfin.com.ua/ua/russian-invading/casualties"
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)'
                   ' Chrome/90.0.4430.93 Safari/537.36'
-           }
+}
 URL_PREFIX = '/month.php?month='
+
+TIME_NOW = datetime.now().strftime('%d-%m-%Y %H:%M:%S')
 
 
 def get_urls():
@@ -73,19 +77,23 @@ def main_enemy():
     try:
         urls_for_scraping = get_urls()
         scraped_data = spider(urls_for_scraping)
-        logger.info(f"Enemy Loses updated json for {scraped_data[0]['date']}. Date start function: {datetime.now()}")
-        with open('enemy_losses.json', 'w', encoding='utf-8') as fd:
-            json.dump(scraped_data, fd, ensure_ascii=False, indent=4)
+        logger.info(f"Enemy Loses updated json for {scraped_data[0]['date']}. Date start function: {TIME_NOW}")
+
+        DB_MONGO_ENEMY.delete_many({})
+        DB_MONGO_ENEMY.insert_many(scraped_data)
+        logger.info(f"Втрати ворога додані до MongoDB")
+        # with open('enemy_losses.json', 'w', encoding='utf-8') as fd:
+        #     json.dump(scraped_data, fd, ensure_ascii=False, indent=4)
     except Exception as ex:
         logger.error(f"Помилка при додаванні втрат ворога: {ex}")
 
 
 def scheduler_enemy():
-    #  Використовується APScheduler для запуску задачі (функції) main_enemy кожні 310 хвилин
+    #  Використовується APScheduler для запуску задачі (функції) main_enemy кожні 540 хвилин
     scheduler = BackgroundScheduler()
-    scheduler.add_job(main_enemy, 'interval', minutes=310)
+    scheduler.add_job(main_enemy, 'interval', minutes=540)
     scheduler.start()
-    logger.info(f"Scheduler started... {datetime.now()}")
+    logger.info(f"Scheduler started... {TIME_NOW}")
 
 
 if __name__ == '__main__':
