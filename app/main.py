@@ -26,7 +26,7 @@ WEBHOOK_PATH = "/"
 WEBHOOK_HOST = "0.0.0.0"
 WEBHOOK_PORT = 8080  # !! 8080
 
-bot = Bot(token=TG_TOKEN)
+bot = Bot(token=OTHER_TG_TOKEN)
 dp = Dispatcher(bot)
 dp.middleware.setup(LoggingMiddleware())
 
@@ -42,34 +42,6 @@ flag_false = False
 like = 0
 dislike = 0
 
-
-# """Here is the information about request processing - Middlewares 2 part
-# In every single layer we can handle the certain type of data/events"""
-
-
-# pre-process update
-# process update
-# pre-process message
-# filter
-# process message
-# handler
-# post process message
-# post process update
-
-# ADMIN = 5556668797  # приклад id адміна
-
-# Приклад middleware якщо не адмін, то виключення
-# class TestMiddleware(BaseMiddleware):
-#
-#     async def on_process_update(self, update, data):
-#         print("Process update")
-#
-#     async def on_pre_process_update(self, update: types.Update, date: dict):
-#         print('Pre process update')
-
-#     async def on_process_message(self, message: types.Message, data: dict):
-#         if message.from_user.id != ADMIN:
-#             raise CancelHandler()
 
 @app.route('/', methods=["POST", "GET"])
 def webhook_handle():
@@ -113,7 +85,7 @@ async def handle_clear_history(message: types.Message):
 
 @dp.message_handler(commands=["my_projects"])
 async def info_my_projects(message: types.Message):
-    ikm = InlineKeyboardMarkup(row_width=2)
+    ikm = InlineKeyboardMarkup(row_width=1)
     ikb1 = InlineKeyboardButton(text='Personal project Quotes', url='https://sanyavas-django.fly.dev/')
     ikb2 = InlineKeyboardButton(text='Team project Xmara', url='https://xmara.fly.dev/')
     ikm.add(ikb1, ikb2)
@@ -208,37 +180,37 @@ async def vote_callback(callback: types.CallbackQuery):
                                    reply_markup=ikm)
 
 
-# async def on_startup(_):
-#     logging.info(f"Start telegram bot. {datetime.now()}")
-#     scheduler_enemy()
-#
-#
-# async def on_shutdown(_):
-#     logging.warning('Shutting down..')
-
-
-async def on_startup(dp):
-    # await bot.send_message(chat_id=ADMIN_ID, text="бот запущено")
-    logging.info(f"Start telegram bot. {TIME_NOW}")
+async def on_startup(_):
+    logging.info(f"Start telegram bot. {datetime.now()}")
     scheduler_enemy()
-    await bot.set_webhook(url=WEBHOOK_URL + WEBHOOK_PATH)
 
 
-async def on_shutdown(dp):
-    # await bot.send_message(chat_id=ADMIN_ID, text="бот вимкнено")
-    logging.warning(f'Shutting down.. {TIME_NOW}')
-    await bot.delete_webhook()
+async def on_shutdown(_):
+    logging.warning('Shutting down..')
 
 
-# if __name__ == '__main__':
-#     # dp.middleware.setup(TestMiddleware())  # add middleware
-#     executor.start_polling(dp,
-#                            on_startup=on_startup,
-#                            on_shutdown=on_shutdown,
-#                            skip_updates=True)
+# async def on_startup(dp):
+#     # await bot.send_message(chat_id=ADMIN_ID, text="бот запущено")
+#     logging.info(f"Start telegram bot. {TIME_NOW}")
+#     scheduler_enemy()
+#     await bot.set_webhook(url=WEBHOOK_URL + WEBHOOK_PATH)
+#
+#
+# async def on_shutdown(dp):
+#     # await bot.send_message(chat_id=ADMIN_ID, text="бот вимкнено")
+#     logging.warning(f'Shutting down.. {TIME_NOW}')
+#     await bot.delete_webhook()
+
 
 if __name__ == '__main__':
-    # app.run()
-    executor.start_webhook(dispatcher=dp, webhook_path=WEBHOOK_PATH,
-                           on_startup=on_startup, on_shutdown=on_shutdown,
-                           host=WEBHOOK_HOST, port=WEBHOOK_PORT, skip_updates=True)
+    # dp.middleware.setup(TestMiddleware())  # add middleware
+    executor.start_polling(dp,
+                           on_startup=on_startup,
+                           on_shutdown=on_shutdown,
+                           skip_updates=True)
+
+# if __name__ == '__main__':
+#     # app.run()
+#     executor.start_webhook(dispatcher=dp, webhook_path=WEBHOOK_PATH,
+#                            on_startup=on_startup, on_shutdown=on_shutdown,
+#                            host=WEBHOOK_HOST, port=WEBHOOK_PORT, skip_updates=True)
