@@ -9,7 +9,7 @@
 ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=plastic&logo=mongodb&logoColor=white)
 <br>
 ### Environment variables: .env
-TG_TOKEN=your Telegram token
-OPENAI_KEY=your OpenAI key
-MONGO_URI=your MongoDB URI
-WEBHOOK_URL=your server
+- TG_TOKEN=your Telegram token
+- OPENAI_KEY=your OpenAI key
+- MONGO_URI=your MongoDB URI
+- WEBHOOK_URL=your server
