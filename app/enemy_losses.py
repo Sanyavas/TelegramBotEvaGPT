@@ -77,11 +77,9 @@ def main_enemy():
     try:
         urls_for_scraping = get_urls()
         scraped_data = spider(urls_for_scraping)
-        logger.info(f"Enemy Loses updated json for {scraped_data[0]['date']}. Date start function: {TIME_NOW}")
-
         DB_MONGO_ENEMY.delete_many({})
         DB_MONGO_ENEMY.insert_many(scraped_data)
-        logger.info(f"Втрати ворога додані до MongoDB")
+        logger.info(f"Enemy Loses updated MongoDB for {scraped_data[0]['date']}. Date start function: {TIME_NOW}")
         # with open('enemy_losses.json', 'w', encoding='utf-8') as fd:
         #     json.dump(scraped_data, fd, ensure_ascii=False, indent=4)
     except Exception as ex:

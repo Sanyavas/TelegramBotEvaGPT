@@ -29,12 +29,12 @@ OPENAI_KEY = os.getenv('OPENAI_KEY')
 def question_to_ai(user_id, question):
     openai.api_key = OPENAI_KEY
     # enemy_losses_data = load_enemy_losses()
-    asd = get_enemy_losses()
+    enemy_losses = get_enemy_losses()
     worker = "Your name is EVA. " \
              "You are an assistant who answers questions clearly and as briefly as possible. " \
              "Always strive to give concise answers. " \
              "Answer in Ukrainian, unless otherwise indicated. " \
-             f"Information about the losses of the enemy: {asd}, these are the official losses of muscovites in Ukraine"
+             # f"Information about the losses of the enemy: {enemy_losses}, these are the official losses of muscovites in Ukraine"
 
     # Отримати кілька останніх повідомлень із бази даних
     chat_hist = get_chat_history(user_id)
